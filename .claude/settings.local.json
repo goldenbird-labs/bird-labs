@@ -1,0 +1,15 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(cp c:/Users/conta/influencer-portfolio/package.json c:/Users/conta/influencer-portfolio-dark/)",
+      "Bash(cp c:/Users/conta/influencer-portfolio/package-lock.json c:/Users/conta/influencer-portfolio-dark/)",
+      "Bash(cp c:/Users/conta/influencer-portfolio/vite.config.js c:/Users/conta/influencer-portfolio-dark/)",
+      "Bash(cp c:/Users/conta/influencer-portfolio/tailwind.config.js c:/Users/conta/influencer-portfolio-dark/)",
+      "Bash(cp c:/Users/conta/influencer-portfolio/postcss.config.js c:/Users/conta/influencer-portfolio-dark/)",
+      "Read(//c/Users/conta/influencer-portfolio-dark/**)",
+      "Bash(npm run *)",
+      "WebSearch",
+      "WebFetch(domain:unsplash.com)"
+    ]
+  }
+}
