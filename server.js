@@ -16,16 +16,21 @@ const PORT = process.env.PORT || 3001
 app.use(cors())
 app.use(express.json())
 
-// Google Sheets setup
-const credentials = JSON.parse(readFileSync(process.env.GOOGLE_CREDENTIALS_PATH, 'utf8'))
-const auth = new google.auth.GoogleAuth({
-  credentials,
-  scopes: ['https://www.googleapis.com/auth/spreadsheets'],
-})
-const sheets = google.sheets({ version: 'v4', auth })
+// Google Sheets setup (optional)
+let sheets = null
 const SHEET_ID = process.env.GOOGLE_SHEET_ID
+try {
+  if (process.env.GOOGLE_CREDENTIALS_PATH) {
+    const credentials = JSON.parse(readFileSync(process.env.GOOGLE_CREDENTIALS_PATH, 'utf8'))
+    const auth = new google.auth.GoogleAuth({ credentials, scopes: ['https://www.googleapis.com/auth/spreadsheets'] })
+    sheets = google.sheets({ version: 'v4', auth })
+  }
+} catch (e) {
+  console.warn('Google Sheets not configured:', e.message)
+}
 
 async function appendToSheet(row) {
+  if (!sheets || !SHEET_ID) return
   await sheets.spreadsheets.values.append({
     spreadsheetId: SHEET_ID,
     range: 'Sheet1!A:J',
