@@ -4,27 +4,29 @@ import { ExternalLink } from 'lucide-react'
 const clients = [
   {
     name: 'Pocket Full of Help',
-    initials: 'PH',
     industry: 'Virtual Assistant Services',
     tagline: 'Running out of time? We\'ve got you.',
     url: 'https://www.pocketfullofhelp.com/',
-    gradient: 'from-purple-600 to-violet-700',
+    logo: 'https://www.pocketfullofhelp.com/pocket%20full%20logo.png',
+    logoBg: 'bg-white',
   },
   {
     name: 'G & V Group',
-    initials: 'GV',
     industry: 'Real Estate · California & Florida',
     tagline: 'REO, Short Sales & HUD Homes specialists.',
     url: 'https://gandvgroup.com/',
-    gradient: 'from-blue-600 to-indigo-700',
+    logo: 'https://gandvgroup.com/favicon.png',
+    logoBg: 'bg-white',
   },
   {
     name: 'Bellissimo International',
-    initials: 'BI',
     industry: 'Modeling & Talent Agency',
     tagline: 'International modeling and talent representation.',
     url: 'https://bellissimo-international-production.up.railway.app/',
-    gradient: 'from-cyan-600 to-blue-700',
+    logo: null,
+    initials: 'B',
+    logoBg: 'bg-[#0B0B0C]',
+    initialsColor: '#B8975A',
   },
 ]
 
@@ -59,19 +61,34 @@ export default function Clients() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.5, delay: i * 0.1 }}
-              className="group card-glow rounded-2xl p-6 bg-[#0d0d22]/80 backdrop-blur-sm border border-purple-900/20 hover:border-purple-700/40 transition-all duration-300 flex flex-col gap-4"
+              className="group card-glow rounded-2xl p-6 bg-[#0d0d22]/80 backdrop-blur-sm border border-purple-900/20 hover:border-purple-700/40 transition-all duration-300 flex flex-col gap-5"
             >
-              <div className="flex items-center justify-between">
-                <div className={`w-12 h-12 rounded-xl bg-gradient-to-br ${client.gradient} flex items-center justify-center font-display font-bold text-white text-sm shrink-0`}>
-                  {client.initials}
-                </div>
-                <ExternalLink size={15} className="text-gray-600 group-hover:text-purple-400 transition-colors" />
+              {/* Logo area */}
+              <div className={`w-full h-20 rounded-xl ${client.logoBg} flex items-center justify-center overflow-hidden`}>
+                {client.logo ? (
+                  <img
+                    src={client.logo}
+                    alt={`${client.name} logo`}
+                    className="max-h-16 max-w-full object-contain p-2"
+                  />
+                ) : (
+                  <span
+                    className="font-serif text-4xl font-bold"
+                    style={{ color: client.initialsColor }}
+                  >
+                    {client.initials}
+                  </span>
+                )}
               </div>
 
-              <div>
-                <h3 className="font-display font-semibold text-white text-base mb-1">{client.name}</h3>
-                <p className="text-purple-400 text-xs font-medium mb-2">{client.industry}</p>
-                <p className="text-gray-500 text-sm leading-relaxed">{client.tagline}</p>
+              {/* Info */}
+              <div className="flex flex-col gap-1 flex-1">
+                <div className="flex items-start justify-between gap-2">
+                  <h3 className="font-display font-semibold text-white text-base leading-tight">{client.name}</h3>
+                  <ExternalLink size={14} className="text-gray-600 group-hover:text-purple-400 transition-colors shrink-0 mt-0.5" />
+                </div>
+                <p className="text-purple-400 text-xs font-medium">{client.industry}</p>
+                <p className="text-gray-500 text-sm leading-relaxed mt-1">{client.tagline}</p>
               </div>
             </motion.a>
           ))}
