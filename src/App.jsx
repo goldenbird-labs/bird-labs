@@ -4,6 +4,7 @@ import TechStrip from './components/TechStrip'
 import FullSolution from './components/FullSolution'
 import Services from './components/Services'
 import WhyUs from './components/WhyUs'
+import Clients from './components/Clients'
 import BookCall from './components/BookCall'
 import LeadForm from './components/LeadForm'
 import Footer from './components/Footer'
@@ -18,6 +19,7 @@ export default function App() {
       <FullSolution />
       <Services />
       <WhyUs />
+      <Clients />
       <BookCall />
       <LeadForm />
       <Footer />
