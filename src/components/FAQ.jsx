@@ -3,7 +3,8 @@ import Reveal from './Reveal'
 import { openChat } from '../lib/chat'
 
 const faqs = [
-  { q: 'How much does it cost?', a: 'Plans start from $69 + tax per month. After a free 15-minute call we give you a clear quote for exactly what you need — no hidden extras.' },
+  { q: 'How much does it cost?', a: 'There are three monthly plans (+ tax): Starter at $99 for your website, Growth at $199 to add an AI chatbot, and Pro at $299 to add automatic follow-up and CRM integrations. Not sure which fits? A free 15-minute call will tell you.' },
+  { q: 'Why a monthly plan instead of a one-off price?', a: 'Most agencies charge thousands of dollars upfront to build a website, then extra for hosting, changes and anything AI. We spread it into one affordable monthly subscription that already includes hosting, support and updates — so you can get started without a big bill, and cancel with 30 days’ notice if it isn’t working for you.' },
   { q: 'How long does it take?', a: 'Most projects are live within 1–3 weeks, depending on how much we’re building.' },
   { q: 'Do I need to be technical?', a: 'Not at all. We handle the design, setup and launch, then show you how everything works. If anything needs changing, just ask us.' },
   { q: 'Is there a contract?', a: 'To get started we take the first and last month’s payment. After that you can cancel any time with 30 days’ notice.' },

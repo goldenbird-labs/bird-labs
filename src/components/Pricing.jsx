@@ -3,57 +3,93 @@ import Reveal from './Reveal'
 import { CALENDLY_URL } from '../lib/site'
 import { openChat } from '../lib/chat'
 
-const included = [
-  'Free consultation and demo',
-  'Design, setup and launch done for you',
-  'Ongoing support and updates included',
-  'Cancel any time with 30 days’ notice',
+const plans = [
+  {
+    name: 'Starter',
+    price: 99,
+    tagline: 'A professional website that brings in enquiries.',
+    features: ['Website design & development', 'Hosting & domain handled', 'Mobile-friendly and Google-ready', 'Contact form with instant lead alerts', 'Support & updates'],
+  },
+  {
+    name: 'Growth',
+    price: 199,
+    tagline: 'Your website plus an AI assistant that works 24/7.',
+    features: ['Everything in Starter', 'AI chatbot trained on your business', 'Lead capture & appointment booking', 'Every lead sent straight to your phone'],
+    featured: true,
+  },
+  {
+    name: 'Pro',
+    price: 299,
+    tagline: 'The full system — nothing slips through the cracks.',
+    features: ['Everything in Growth', 'Automatic email & SMS follow-up', 'CRM setup & integrations', 'Monthly results review'],
+  },
 ]
+
+const allPlans = ['No big upfront build fee', 'Free consultation & demo', 'Setup and launch done for you', 'Cancel any time with 30 days’ notice']
 
 export default function Pricing() {
   return (
     <section id="pricing" className="section" aria-labelledby="pricing-title">
       <div className="container-site">
-        <Reveal className="relative overflow-hidden rounded-3xl bg-ink-900 px-6 py-12 text-white sm:px-12 sm:py-16">
-          <div className="absolute -right-24 -top-24 h-72 w-72 rounded-full bg-brand-600/30 blur-3xl" aria-hidden="true" />
-          <div className="relative grid gap-10 lg:grid-cols-2 lg:items-center">
-            <div>
-              <p className="text-sm font-semibold text-brand-300">Pricing</p>
-              <h2 id="pricing-title" className="mt-3 text-3xl font-extrabold leading-tight text-white sm:text-4xl">
-                Simple monthly plans. No surprises.
-              </h2>
-              <p className="mt-4 text-lg leading-relaxed text-ink-300">
-                Every business is different, so we quote after a free call — and we only recommend what will actually bring you customers.
-              </p>
-              <div className="mt-8 flex items-end gap-2">
-                <span className="text-sm text-ink-300">From</span>
-                <span className="font-display text-5xl font-extrabold leading-none text-white">$69</span>
-                <span className="pb-1 text-ink-300">/ month + tax</span>
-              </div>
-            </div>
+        <Reveal className="mx-auto max-w-2xl text-center">
+          <p className="eyebrow">Pricing</p>
+          <h2 id="pricing-title" className="section-title">No $1,000s upfront. Just one simple monthly plan.</h2>
+          <p className="section-lead">
+            Agencies often charge thousands of dollars to build a website — and more again for a chatbot. We keep it cost-effective: one affordable monthly subscription covers design, hosting, AI and support. Start where you are and move up any time.
+          </p>
+        </Reveal>
 
-            <div className="rounded-2xl bg-white/5 p-6 ring-1 ring-white/10 sm:p-8">
-              <p className="font-semibold text-white">Every plan includes</p>
-              <ul className="mt-4 space-y-3">
-                {included.map(x => (
-                  <li key={x} className="flex items-start gap-3 text-ink-200">
-                    <span className="mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-brand-500/20 text-brand-300">
+        <div className="mt-12 grid gap-6 lg:grid-cols-3 lg:items-stretch">
+          {plans.map((plan, i) => (
+            <Reveal
+              key={plan.name}
+              delay={i * 80}
+              className={`relative flex flex-col rounded-3xl p-7 sm:p-8 ${plan.featured ? 'bg-ink-900 text-white shadow-lift lg:-my-3 lg:py-11' : 'card'}`}
+            >
+              {plan.featured && (
+                <span className="absolute -top-3 left-1/2 -translate-x-1/2 rounded-full bg-brand-600 px-3.5 py-1 text-xs font-semibold text-white">Recommended</span>
+              )}
+              <h3 className={`text-lg font-bold ${plan.featured ? 'text-white' : ''}`}>{plan.name}</h3>
+              <p className={`mt-1.5 text-[15px] leading-relaxed ${plan.featured ? 'text-ink-300' : 'text-ink-600'}`}>{plan.tagline}</p>
+              <p className="mt-6 flex items-end gap-1.5">
+                <span className={`font-display text-5xl font-extrabold leading-none ${plan.featured ? 'text-white' : 'text-ink-900'}`}>${plan.price}</span>
+                <span className={`pb-1 text-[15px] ${plan.featured ? 'text-ink-300' : 'text-ink-500'}`}>/ month + tax</span>
+              </p>
+
+              <ul className="mt-7 flex-1 space-y-3">
+                {plan.features.map(f => (
+                  <li key={f} className={`flex items-start gap-3 text-[15px] ${plan.featured ? 'text-ink-100' : 'text-ink-700'}`}>
+                    <span className={`mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full ${plan.featured ? 'bg-brand-500/25 text-brand-200' : 'bg-brand-50 text-brand-700'}`}>
                       <Check size={13} strokeWidth={3} />
                     </span>
-                    {x}
+                    {f}
                   </li>
                 ))}
               </ul>
-              <div className="mt-8 flex flex-col gap-3 sm:flex-row">
-                <a href={CALENDLY_URL} target="_blank" rel="noopener noreferrer" className="btn flex-1 bg-white text-ink-900 hover:bg-brand-50">
-                  <Calendar size={18} /> Get my quote
-                </a>
-                <button type="button" onClick={() => openChat('How much would it cost for my business?')} className="btn flex-1 border border-white/20 text-white hover:bg-white/10">
-                  <MessageCircle size={18} /> Ask about pricing
-                </button>
-              </div>
-            </div>
-          </div>
+
+              <a
+                href={CALENDLY_URL}
+                target="_blank"
+                rel="noopener noreferrer"
+                className={`btn mt-8 w-full py-3.5 ${plan.featured ? 'bg-white text-ink-900 hover:bg-brand-50' : 'bg-brand-700 text-white hover:bg-brand-800'}`}
+              >
+                <Calendar size={18} /> Get started with {plan.name}
+              </a>
+            </Reveal>
+          ))}
+        </div>
+
+        <Reveal className="mt-12 flex flex-col items-center gap-5 text-center">
+          <ul className="flex flex-col gap-x-8 gap-y-2 text-[15px] text-ink-600 sm:flex-row">
+            {allPlans.map(x => (
+              <li key={x} className="flex items-center justify-center gap-2">
+                <Check size={17} className="text-brand-700" strokeWidth={2.5} /> {x}
+              </li>
+            ))}
+          </ul>
+          <button type="button" onClick={() => openChat('Which plan would be right for my business?')} className="inline-flex items-center gap-1.5 text-[15px] font-semibold text-brand-700 hover:text-brand-900">
+            <MessageCircle size={17} /> Not sure which plan? Ask Birdie
+          </button>
         </Reveal>
       </div>
     </section>

@@ -3,7 +3,7 @@ import { CALENDLY_URL } from '../lib/site'
 import { BirdMark } from './Logo'
 import { openChat } from '../lib/chat'
 
-const promises = ['Free consultation', 'Live in 1–3 weeks', 'No tech skills needed']
+const promises = ['No big upfront cost', 'Plans from $99/month', 'Live in 1–3 weeks']
 
 function HeroVisual() {
   return (

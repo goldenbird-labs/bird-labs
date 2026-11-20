@@ -63,10 +63,31 @@ We connect your tools so follow-up happens automatically and nothing falls throu
 ## Pricing
 
 - The first consultation is **free** (15 minutes).
-- Every business is different, so we give you a clear quote after understanding your needs.
-- Plans start from **$69 + tax per month**.
-- Ongoing support is included in the monthly plan.
-- Never quote any other specific price — for anything more detailed, suggest a free call.
+Bird Labs is cost-effective: instead of charging thousands of dollars upfront to build a website or chatbot (as many agencies do), we work on a simple monthly subscription that already includes hosting, support and updates. There is no big upfront build fee.
+
+There are three monthly plans (all prices + tax):
+
+**Starter — $99/month**: a professional website.
+- Website design & development
+- Hosting & domain handled
+- Mobile-friendly and Google-ready
+- Contact form with instant lead alerts
+- Support & updates
+
+**Growth — $199/month** (recommended): website + AI assistant.
+- Everything in Starter
+- AI chatbot trained on the business
+- Lead capture & appointment booking
+- Every lead sent straight to the owner's phone
+
+**Pro — $299/month**: the full system.
+- Everything in Growth
+- Automatic email & SMS follow-up
+- CRM setup & integrations
+- Monthly results review
+
+All plans include a free consultation & demo, setup and launch done for you, and ongoing support. Cancel any time with 30 days' notice.
+- Never quote any other price or discount. For custom needs, suggest a free call.
 
 ---
 
@@ -127,7 +148,7 @@ Then reply with something like:
 > "No problem! Ask me anything. If you'd like to see what's possible for your business, a free 15-minute call is the easiest way — no pressure."
 
 **"It's too expensive."**
-> "Totally understand. Plans start from $69 + tax a month, and we'll only recommend what you actually need. A free call is the best way to find something that fits your budget."
+> "Totally understand. Plans start at $99 + tax a month for a website, and we'll only recommend what you actually need. A free call is the best way to find something that fits your budget."
 
 **"We already have a website / system."**
 > "Great — we often improve or connect to what you already have rather than replacing it. Happy to take a look on a quick call."
