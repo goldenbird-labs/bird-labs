@@ -1,119 +1,92 @@
-import { motion } from 'framer-motion'
-import { Bot, Workflow, TrendingUp, Puzzle, Brain, MessageSquare, Globe } from 'lucide-react'
+import { LayoutTemplate, Bot, Workflow, Check, ArrowRight, Compass, Headphones, Sparkles } from 'lucide-react'
+import Reveal from './Reveal'
+import { openChat } from '../lib/chat'
 
 const services = [
   {
-    icon: Globe,
-    title: 'Website Design & Development',
-    description: 'Not on the web yet? We build your entire digital presence from scratch — fast-loading, mobile-first, and conversion-optimised. Already online? We redesign and upgrade.',
-    tags: ['React', 'Next.js', 'Custom Design', 'SEO-Ready'],
-    color: 'from-cyan-600 to-blue-700',
+    icon: LayoutTemplate,
+    name: 'Websites',
+    title: 'A website that wins you customers',
+    body: "Whether you're starting from scratch or your current site isn't working, we design and build a site that makes it obvious what you do and easy to get in touch.",
+    gets: ['Custom design for your brand', 'Fast and mobile-friendly', 'Set up to be found on Google', 'Contact forms & online booking', 'Domain, hosting & launch handled'],
+    ask: 'What would a new website for my business include?',
   },
   {
     icon: Bot,
-    title: 'AI Chatbots',
-    description: 'Intelligent conversational agents that handle customer queries, qualify leads, and provide 24/7 support — trained on your business data.',
-    tags: ['GPT-4o', 'Custom Training', 'Multi-Platform'],
-    color: 'from-purple-600 to-purple-800',
+    name: 'AI chatbots',
+    title: 'An assistant that never misses a customer',
+    body: 'A chatbot trained on your services, prices and FAQs that answers in your voice 24/7 — and turns curious visitors into booked appointments.',
+    gets: ['Answers questions instantly', 'Collects name, email & phone', 'Books calls and appointments', 'Sends every lead to your phone', 'Hands off to you when needed'],
+    ask: 'How would an AI chatbot work for my business?',
+    featured: true,
   },
   {
     icon: Workflow,
-    title: 'Automation Agents',
-    description: 'Autonomous AI agents that execute complex workflows, integrate with your tools, and make decisions — without human intervention.',
-    tags: ['n8n', 'Make.com', 'Custom Pipelines'],
-    color: 'from-blue-600 to-blue-800',
-  },
-  {
-    icon: TrendingUp,
-    title: 'Lead Generation Systems',
-    description: 'AI-powered outreach and lead capture systems that identify prospects, personalize messaging, and fill your pipeline automatically.',
-    tags: ['Automated Outreach', 'CRM Integration', 'Analytics'],
-    color: 'from-violet-600 to-violet-800',
-  },
-  {
-    icon: Brain,
-    title: 'Custom AI Solutions',
-    description: 'Bespoke AI models and integrations built around your specific business needs — from fine-tuned LLMs to computer vision pipelines.',
-    tags: ['Fine-tuning', 'RAG', 'API Integration'],
-    color: 'from-indigo-600 to-indigo-800',
-  },
-  {
-    icon: MessageSquare,
-    title: 'AI Customer Support',
-    description: 'Deploy intelligent support systems that resolve tickets instantly, escalate complex cases, and learn from every interaction.',
-    tags: ['Zendesk', 'Intercom', 'Freshdesk'],
-    color: 'from-purple-700 to-blue-700',
-  },
-  {
-    icon: Puzzle,
-    title: 'AI Consulting & Strategy',
-    description: 'Not sure where to start? We audit your operations, identify AI opportunities, and build a roadmap for transformation.',
-    tags: ['Audit', 'Roadmap', 'Implementation'],
-    color: 'from-blue-700 to-purple-700',
+    name: 'Automation',
+    title: 'Follow-up that happens on its own',
+    body: 'We connect your forms, email, calendar and CRM so every lead gets a fast reply and a follow-up — without you copying details around.',
+    gets: ['Instant email & SMS replies', 'CRM setup (HubSpot, GoHighLevel…)', 'Calendar & payment connections', 'Automatic reminders', 'Hours of admin saved each week'],
+    ask: 'What could you automate for my business?',
   },
 ]
 
-const container = {
-  hidden: {},
-  show: { transition: { staggerChildren: 0.08 } },
-}
-
-const item = {
-  hidden: { opacity: 0, y: 30 },
-  show: { opacity: 1, y: 0, transition: { duration: 0.5 } },
-}
+const extras = [
+  { icon: Compass, label: 'AI consulting & strategy' },
+  { icon: Headphones, label: 'AI customer support' },
+  { icon: Sparkles, label: 'Custom AI solutions' },
+]
 
 export default function Services() {
   return (
-    <section id="services" className="py-16 sm:py-24 px-4 sm:px-6 relative">
-      <div className="max-w-7xl mx-auto">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6 }}
-          className="text-center mb-10 sm:mb-16"
-        >
-          <span className="text-purple-400 text-xs sm:text-sm font-semibold tracking-widest uppercase">What We Build</span>
-          <h2 className="font-display text-3xl sm:text-4xl md:text-5xl font-bold mt-3 mb-4">
-            Web & AI Solutions That <span className="gradient-text">Actually Work</span>
-          </h2>
-          <p className="text-gray-400 text-base sm:text-lg max-w-2xl mx-auto">
-            From your first website to production-grade AI — we build the complete digital stack that drives real, measurable growth.
-          </p>
-        </motion.div>
+    <section id="services" className="section bg-ink-50/70" aria-labelledby="services-title">
+      <div className="container-site">
+        <Reveal className="mx-auto max-w-2xl text-center">
+          <p className="eyebrow">What we do</p>
+          <h2 id="services-title" className="section-title">Three things that bring you more business</h2>
+          <p className="section-lead">Pick one, or let us combine them. Everything is set up and looked after by us — you just get the customers.</p>
+        </Reveal>
 
-        <motion.div
-          variants={container}
-          initial="hidden"
-          whileInView="show"
-          viewport={{ once: true }}
-          className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6"
-        >
-          {services.map(service => {
-            const Icon = service.icon
-            return (
-              <motion.div
-                key={service.title}
-                variants={item}
-                className="card-glow rounded-2xl p-5 sm:p-6 bg-[#0d0d22]/80 backdrop-blur-sm group cursor-default"
-              >
-                <div className={`w-11 h-11 sm:w-12 sm:h-12 rounded-xl bg-gradient-to-br ${service.color} flex items-center justify-center mb-4 sm:mb-5 group-hover:scale-110 transition-transform duration-300`}>
-                  <Icon size={20} className="text-white" />
-                </div>
-                <h3 className="font-display text-lg sm:text-xl font-semibold text-white mb-2 sm:mb-3">{service.title}</h3>
-                <p className="text-gray-400 text-sm leading-relaxed mb-4 sm:mb-5">{service.description}</p>
-                <div className="flex flex-wrap gap-2">
-                  {service.tags.map(tag => (
-                    <span key={tag} className="px-2.5 py-1 rounded-full text-xs bg-purple-900/30 text-purple-300 border border-purple-800/30">
-                      {tag}
-                    </span>
-                  ))}
-                </div>
-              </motion.div>
-            )
-          })}
-        </motion.div>
+        <div className="mt-12 grid gap-6 lg:grid-cols-3">
+          {services.map(({ icon: Icon, name, title, body, gets, ask, featured }, i) => (
+            <Reveal
+              key={name}
+              delay={i * 80}
+              className={`card relative flex flex-col p-7 ${featured ? 'ring-2 ring-brand-600 lg:-translate-y-2' : ''}`}
+            >
+              {featured && (
+                <span className="absolute -top-3 left-7 rounded-full bg-brand-700 px-3 py-1 text-xs font-semibold text-white">Try it live on this page</span>
+              )}
+              <div className="flex items-center gap-3">
+                <span className="flex h-11 w-11 items-center justify-center rounded-xl bg-brand-700 text-white">
+                  <Icon size={21} />
+                </span>
+                <span className="text-sm font-semibold uppercase tracking-wide text-brand-800">{name}</span>
+              </div>
+              <h3 className="mt-5 text-xl font-bold">{title}</h3>
+              <p className="mt-2.5 leading-relaxed text-ink-600">{body}</p>
+              <p className="mt-6 text-sm font-semibold text-ink-900">What you get</p>
+              <ul className="mt-3 flex-1 space-y-2.5">
+                {gets.map(g => (
+                  <li key={g} className="flex items-start gap-2.5 text-[15px] text-ink-700">
+                    <Check size={17} className="mt-0.5 shrink-0 text-brand-700" strokeWidth={2.5} /> {g}
+                  </li>
+                ))}
+              </ul>
+              <button type="button" onClick={() => openChat(ask)} className="mt-7 inline-flex items-center gap-1.5 self-start text-[15px] font-semibold text-brand-700 hover:text-brand-900">
+                Ask how this works for you <ArrowRight size={16} />
+              </button>
+            </Reveal>
+          ))}
+        </div>
+
+        <Reveal className="mt-10 flex flex-col items-center justify-center gap-3 text-center sm:flex-row sm:gap-6">
+          <span className="text-sm font-medium text-ink-500">Also available:</span>
+          {extras.map(({ icon: Icon, label }) => (
+            <span key={label} className="inline-flex items-center gap-2 text-[15px] font-medium text-ink-700">
+              <Icon size={17} className="text-brand-700" /> {label}
+            </span>
+          ))}
+        </Reveal>
       </div>
     </section>
   )

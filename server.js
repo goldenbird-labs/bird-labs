@@ -1,100 +1,78 @@
+import 'dotenv/config'
 import express from 'express'
-import cors from 'cors'
-import dotenv from 'dotenv'
-import axios from 'axios'
-import { google } from 'googleapis'
-import { readFileSync } from 'fs'
-import { fileURLToPath } from 'url'
 import path from 'path'
-
-dotenv.config()
+import { existsSync } from 'fs'
+import { fileURLToPath } from 'url'
+import { initStore } from './server/store.js'
+import { captureLead } from './server/leads.js'
+import { chatRouter } from './server/chat.js'
+import { analyticsRouter } from './server/analytics.js'
+import { adminRouter } from './server/admin.js'
+import { rateLimit, clean, EMAIL_RE } from './server/util.js'
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
 const app = express()
 const PORT = process.env.PORT || 3001
 
-app.use(cors())
-app.use(express.json())
+// Hostinger serves the app behind its CDN/proxy; trust it so req.ip and req.secure are correct.
+app.set('trust proxy', true)
+app.disable('x-powered-by')
+app.use(express.json({ limit: '100kb' }))
 
-// Google Sheets setup (optional)
-let sheets = null
-const SHEET_ID = process.env.GOOGLE_SHEET_ID
-try {
-  if (process.env.GOOGLE_CREDENTIALS_PATH) {
-    const credentials = JSON.parse(readFileSync(process.env.GOOGLE_CREDENTIALS_PATH, 'utf8'))
-    const auth = new google.auth.GoogleAuth({ credentials, scopes: ['https://www.googleapis.com/auth/spreadsheets'] })
-    sheets = google.sheets({ version: 'v4', auth })
+app.use((req, res, next) => {
+  res.set('X-Content-Type-Options', 'nosniff')
+  res.set('Referrer-Policy', 'strict-origin-when-cross-origin')
+  next()
+})
+
+// ── Contact form & free-review leads ─────────────────────────────────────────
+app.post('/api/leads', rateLimit({ windowMs: 15 * 60 * 1000, max: 5, message: 'Too many submissions. Please try again later or message us on WhatsApp.' }), async (req, res) => {
+  const b = req.body || {}
+
+  // Honeypot: real visitors never see or fill the "company_site" field.
+  if (clean(b.company_site)) return res.json({ success: true })
+
+  const source = b.source === 'review' ? 'review' : 'form'
+  const lead = {
+    source,
+    name: clean(b.name, 200),
+    email: clean(b.email, 254).toLowerCase(),
+    phone: clean(b.phone, 64),
+    company: clean(b.company, 200),
+    website: clean(b.website, 300),
+    service: clean(b.service, 100),
+    message: clean(b.message, 5000),
+    ip: req.ip,
   }
-} catch (e) {
-  console.warn('Google Sheets not configured:', e.message)
-}
 
-async function appendToSheet(row) {
-  if (!sheets || !SHEET_ID) return
-  await sheets.spreadsheets.values.append({
-    spreadsheetId: SHEET_ID,
-    range: 'Sheet1!A:J',
-    valueInputOption: 'USER_ENTERED',
-    requestBody: { values: [row] },
-  })
-}
-
-async function sendPushover(lead) {
-  const message = `New Lead from Bird Labs!\n\nName: ${lead.name}\nEmail: ${lead.email}\nPhone: ${lead.phone || 'N/A'}\nCompany: ${lead.company || 'N/A'}\nLocation: ${lead.city || ''}, ${lead.country || 'Unknown'}\nMessage: ${lead.message}`
-  await axios.post('https://api.pushover.net/1/messages.json', {
-    token: process.env.PUSHOVER_APP_TOKEN,
-    user: process.env.PUSHOVER_USER_KEY,
-    title: 'New Lead - Bird Labs',
-    message,
-    priority: 1,
-  })
-}
-
-async function getLocationFromIP(ip) {
-  try {
-    // Skip for localhost/private IPs
-    if (!ip || ip === '127.0.0.1' || ip === '::1' || ip.startsWith('192.168') || ip.startsWith('10.')) {
-      return { country: 'Local', city: 'Local', region: 'Local' }
-    }
-    const { data } = await axios.get(`http://ip-api.com/json/${ip}?fields=country,city,regionName`, { timeout: 3000 })
-    return { country: data.country || '', city: data.city || '', region: data.regionName || '' }
-  } catch {
-    return { country: '', city: '', region: '' }
+  if (!EMAIL_RE.test(lead.email)) return res.status(400).json({ error: 'Please enter a valid email address.' })
+  if (source === 'form' && (!lead.name || !lead.message)) {
+    return res.status(400).json({ error: 'Please add your name and a short message.' })
   }
-}
+  if (source === 'review' && !lead.message) lead.message = 'Requested a free website & AI review.'
 
-app.post('/api/leads', async (req, res) => {
   try {
-    const { name, email, phone, company, message } = req.body
-
-    if (!name || !email || !message) {
-      return res.status(400).json({ error: 'Name, email, and message are required.' })
-    }
-
-    const ip = req.headers['x-forwarded-for']?.split(',')[0] || req.socket.remoteAddress || ''
-    const { country, city, region } = await getLocationFromIP(ip.trim())
-
-    const timestamp = new Date().toLocaleString('en-US', { timeZone: 'UTC' }) + ' UTC'
-    const row = [timestamp, name, email, phone || '', company || '', message, ip, country, city, region]
-
-    const lead = { name, email, phone, company, message, country, city, region }
-
-    await appendToSheet(row)
-    await sendPushover(lead)
-
+    await captureLead(lead)
     res.json({ success: true })
-  } catch (err) {
-    console.error('Lead capture error:', err.message)
-    res.status(500).json({ error: 'Something went wrong. Please try again.' })
+  } catch {
+    res.status(500).json({ error: 'Something went wrong on our side. Please email hello@birdlabs.net or message us on WhatsApp.' })
   }
 })
 
-// Serve frontend in production
+app.use(chatRouter)
+app.use(analyticsRouter)
+app.use(adminRouter)
+
+app.use('/api', (req, res) => res.status(404).json({ error: 'Not found' }))
+
+// ── Built frontend: / (site), /chat (Birdie, embedded), /admin (dashboard) ───
 const distPath = path.join(__dirname, 'dist')
-import { existsSync } from 'fs'
 if (existsSync(distPath)) {
-  app.use(express.static(distPath))
+  app.use('/assets', express.static(path.join(distPath, 'assets'), { immutable: true, maxAge: '1y' }))
+  app.use(express.static(distPath, { extensions: ['html'], maxAge: '1h' }))
+  app.get('/admin/{*rest}', (req, res) => res.sendFile(path.join(distPath, 'admin.html')))
   app.get('/{*path}', (req, res) => res.sendFile(path.join(distPath, 'index.html')))
 }
 
+await initStore()
 app.listen(PORT, () => console.log(`Bird Labs server running at http://localhost:${PORT}`))

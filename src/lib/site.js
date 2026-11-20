@@ -1,0 +1,5 @@
+export const CALENDLY_URL = 'https://calendly.com/goldenbirdconsulting/15min'
+export const WHATSAPP_URL = 'https://wa.me/19053809763'
+export const EMAIL = 'hello@birdlabs.net'
+export const PHONE_DISPLAY = '+1 905-380-9763'
+export const PHONE_TEL = '+19053809763'

@@ -1,0 +1,43 @@
+import { ChevronDown, MessageCircle } from 'lucide-react'
+import Reveal from './Reveal'
+import { openChat } from '../lib/chat'
+
+const faqs = [
+  { q: 'How much does it cost?', a: 'Plans start from $69 + tax per month. After a free 15-minute call we give you a clear quote for exactly what you need — no hidden extras.' },
+  { q: 'How long does it take?', a: 'Most projects are live within 1–3 weeks, depending on how much we’re building.' },
+  { q: 'Do I need to be technical?', a: 'Not at all. We handle the design, setup and launch, then show you how everything works. If anything needs changing, just ask us.' },
+  { q: 'Is there a contract?', a: 'To get started we take the first and last month’s payment. After that you can cancel any time with 30 days’ notice.' },
+  { q: 'What does the AI chatbot actually do?', a: 'It answers your customers’ questions using information about your business, collects their contact details, books appointments, and sends you every lead straight away. Want to see one? The assistant in the corner of this page is one we built.' },
+  { q: 'I already have a website. Can you still help?', a: 'Yes. We can redesign it, or keep it and add a chatbot and automatic follow-up to what you already have.' },
+  { q: 'Is support included?', a: 'Yes — ongoing support, updates and improvements are part of every monthly plan.' },
+  { q: 'Where are you based?', a: 'We’re based in Niagara Falls, Ontario, and work with businesses anywhere. Our hours are Monday–Friday, 9am–5pm Eastern.' },
+]
+
+export default function FAQ() {
+  return (
+    <section id="faq" className="section bg-ink-50/70" aria-labelledby="faq-title">
+      <div className="container-site grid gap-10 lg:grid-cols-[1fr_1.6fr] lg:gap-16">
+        <Reveal>
+          <p className="eyebrow">FAQ</p>
+          <h2 id="faq-title" className="section-title">Questions? Answered.</h2>
+          <p className="section-lead">Can’t find what you’re looking for? Our AI assistant can answer instantly, or you can reach a real person on WhatsApp.</p>
+          <button type="button" onClick={() => openChat()} className="btn-secondary mt-6">
+            <MessageCircle size={18} /> Ask a question
+          </button>
+        </Reveal>
+
+        <div className="space-y-3">
+          {faqs.map(({ q, a }) => (
+            <details key={q} className="card group p-0 [&_summary::-webkit-details-marker]:hidden">
+              <summary className="flex cursor-pointer list-none items-center justify-between gap-4 px-6 py-5 text-left text-[17px] font-semibold text-ink-900">
+                {q}
+                <ChevronDown size={20} className="shrink-0 text-ink-500 transition-transform group-open:rotate-180" />
+              </summary>
+              <p className="-mt-1 px-6 pb-6 leading-relaxed text-ink-600">{a}</p>
+            </details>
+          ))}
+        </div>
+      </div>
+    </section>
+  )
+}

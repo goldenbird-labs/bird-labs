@@ -24,3 +24,9 @@ google-credentials.json
 *.njsproj
 *.sln
 *.sw?
+
+# Local data (leads/analytics when no database is configured)
+data/
+
+# Claude Code local settings
+.claude/

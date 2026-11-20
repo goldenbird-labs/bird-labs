@@ -1,13 +1,14 @@
-import { useState, useEffect } from 'react'
-import { motion, AnimatePresence } from 'framer-motion'
-import { Menu, X } from 'lucide-react'
+import { useEffect, useState } from 'react'
+import { Menu, X, Calendar } from 'lucide-react'
+import Logo from './Logo'
+import { CALENDLY_URL } from '../lib/site'
 
 const links = [
-  { label: 'Our Solution', href: '#solution' },
   { label: 'Services', href: '#services' },
-  { label: 'Why Us', href: '#why' },
-  { label: 'Book a Call', href: '#book' },
-  { label: 'Contact', href: '#contact' },
+  { label: 'How it works', href: '#process' },
+  { label: 'Our work', href: '#work' },
+  { label: 'Pricing', href: '#pricing' },
+  { label: 'FAQ', href: '#faq' },
 ]
 
 export default function Navbar() {
@@ -15,64 +16,66 @@ export default function Navbar() {
   const [open, setOpen] = useState(false)
 
   useEffect(() => {
-    const handleScroll = () => setScrolled(window.scrollY > 40)
-    window.addEventListener('scroll', handleScroll)
-    return () => window.removeEventListener('scroll', handleScroll)
+    const onScroll = () => setScrolled(window.scrollY > 8)
+    onScroll()
+    window.addEventListener('scroll', onScroll, { passive: true })
+    return () => window.removeEventListener('scroll', onScroll)
   }, [])
 
+  useEffect(() => {
+    document.body.style.overflow = open ? 'hidden' : ''
+    return () => { document.body.style.overflow = '' }
+  }, [open])
+
   return (
-    <motion.nav
-      initial={{ y: -80, opacity: 0 }}
-      animate={{ y: 0, opacity: 1 }}
-      transition={{ duration: 0.6, ease: 'easeOut' }}
-      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-        scrolled ? 'bg-[#080818]/90 backdrop-blur-md border-b border-purple-900/30' : 'bg-transparent'
-      }`}
-    >
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 py-3 sm:py-4 flex items-center justify-between">
-        {/* Wordmark */}
-        <a href="#" className="font-display font-bold text-xl sm:text-2xl tracking-tight">
-          BIRD <span className="gradient-text">LABS</span>
+    <header className={`sticky top-0 z-40 transition-colors duration-200 ${scrolled || open ? 'border-b border-ink-200/80 bg-white/90 backdrop-blur-md' : 'bg-transparent'}`}>
+      <nav className="container-site flex h-16 items-center justify-between sm:h-[72px]" aria-label="Main">
+        <a href="#top" aria-label="Bird Labs — home" onClick={() => setOpen(false)}>
+          <Logo />
         </a>
 
-        {/* Desktop links */}
-        <div className="hidden md:flex items-center gap-6 lg:gap-8">
+        <div className="hidden items-center gap-8 lg:flex">
           {links.map(l => (
-            <a key={l.label} href={l.href} className="text-sm text-gray-400 hover:text-white transition-colors duration-200 tracking-wide">
+            <a key={l.href} href={l.href} className="text-[15px] font-medium text-ink-600 transition hover:text-ink-900">
               {l.label}
             </a>
           ))}
-          <a href="#contact" className="px-5 py-2 rounded-lg bg-gradient-to-r from-purple-600 to-blue-600 text-white text-sm font-semibold hover:opacity-90 transition-opacity">
-            Get Started
-          </a>
         </div>
 
-        {/* Mobile toggle */}
-        <button className="md:hidden text-gray-300 p-1" onClick={() => setOpen(!open)}>
-          {open ? <X size={22} /> : <Menu size={22} />}
-        </button>
-      </div>
-
-      {/* Mobile menu */}
-      <AnimatePresence>
-        {open && (
-          <motion.div
-            initial={{ opacity: 0, height: 0 }}
-            animate={{ opacity: 1, height: 'auto' }}
-            exit={{ opacity: 0, height: 0 }}
-            className="md:hidden bg-[#0d0d22] border-t border-purple-900/30 px-4 py-4 flex flex-col gap-4"
+        <div className="flex items-center gap-2">
+          <a href="#contact" className="hidden text-[15px] font-medium text-ink-700 hover:text-ink-900 md:inline-block lg:mr-3">
+            Contact
+          </a>
+          <a href={CALENDLY_URL} target="_blank" rel="noopener noreferrer" className="btn-primary hidden py-2.5 sm:inline-flex">
+            <Calendar size={16} /> Book a free call
+          </a>
+          <button
+            type="button"
+            className="-mr-2 rounded-lg p-2 text-ink-800 lg:hidden"
+            onClick={() => setOpen(o => !o)}
+            aria-expanded={open}
+            aria-controls="mobile-menu"
+            aria-label={open ? 'Close menu' : 'Open menu'}
           >
-            {links.map(l => (
-              <a key={l.label} href={l.href} className="text-gray-300 hover:text-white py-1 text-base" onClick={() => setOpen(false)}>
+            {open ? <X size={24} /> : <Menu size={24} />}
+          </button>
+        </div>
+      </nav>
+
+      {open && (
+        <div id="mobile-menu" className="h-[calc(100dvh-4rem)] overflow-y-auto border-t border-ink-100 bg-white lg:hidden">
+          <div className="container-site flex flex-col gap-1 py-6">
+            {[...links, { label: 'Contact', href: '#contact' }].map(l => (
+              <a key={l.href} href={l.href} onClick={() => setOpen(false)} className="rounded-xl px-3 py-3 text-lg font-semibold text-ink-900 hover:bg-ink-50">
                 {l.label}
               </a>
             ))}
-            <a href="#contact" onClick={() => setOpen(false)} className="px-5 py-3 rounded-lg bg-gradient-to-r from-purple-600 to-blue-600 text-white text-sm font-semibold text-center">
-              Get Started
+            <a href={CALENDLY_URL} target="_blank" rel="noopener noreferrer" className="btn-primary mt-4 py-3.5" onClick={() => setOpen(false)}>
+              <Calendar size={18} /> Book a free 15-min call
             </a>
-          </motion.div>
-        )}
-      </AnimatePresence>
-    </motion.nav>
+          </div>
+        </div>
+      )}
+    </header>
   )
 }
