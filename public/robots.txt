@@ -2,6 +2,7 @@ User-agent: *
 Allow: /
 Disallow: /admin
 Disallow: /chat
+Disallow: /portal
 Disallow: /api/
 
 Sitemap: https://birdlabs.net/sitemap.xml

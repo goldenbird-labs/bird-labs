@@ -6,18 +6,29 @@ The marketing site for [birdlabs.net](https://birdlabs.net), with Birdie (the AI
 |---|---|
 | `/` | Public website (React + Tailwind) |
 | `/chat` | Birdie, the AI chatbot. Opens in the floating chat window on the site |
-| `/admin` | Admin dashboard: visitor analytics and every lead from the form, chatbot and free-review requests |
+| `/admin` | Admin dashboard: visitor analytics, leads, client support requests and client accounts |
+| `/portal` | Client portal: customers sign in to send support requests and see their monthly support hours |
 
 The Express server in `server.js` serves the built site and these APIs:
 
 - `POST /api/leads` — contact form and free-review requests
 - `POST /api/chat`, `GET /api/chat/config` — Birdie (OpenAI, streaming)
 - `POST /api/track` — cookie-free page-view and click analytics
-- `/api/admin/*` — password-protected dashboard data, lead list, CSV export
+- `/api/admin/*` — password-protected dashboard data, lead list, CSV export, customers and requests
+- `/api/portal/*` — client sign-in, support requests and replies
 
 ## Where leads go
 
 Every lead is saved to the database and shows up in **/admin → Leads**. Copies also go to Pushover and Google Sheets when those are configured. If a destination fails, the lead is still kept as long as one of them worked. If all of them fail, the full lead is printed to the server log.
+
+## Client portal
+
+1. In **/admin → Customers**, click **Add customer**. Choose their plan; support hours fill in automatically (Starter 2 h, Growth 3 h, Pro 4 h) and can be changed.
+2. A password is generated. Copy the ready-made message and send it to the customer. The password is only shown once, but you can always issue a new one.
+3. Customers sign in at `/portal` (the **Client login** button on the site), send requests and reply to you.
+4. In **/admin → Requests**, reply to them, change the status and **log time**. Logged time counts toward their monthly hours, which reset on the 1st.
+
+You get a Pushover alert for every new request and customer reply. Customers get an email when you reply, if `RESEND_API_KEY` is set.
 
 ## Deploying on Hostinger (GitHub)
 
@@ -26,7 +37,7 @@ Every lead is saved to the database and shows up in **/admin → Leads**. Copies
    - Build command: `npm run build`
    - Start command: `node server.js` (or `npm start`, which builds first)
    - Node version: 20 or newer
-3. Add the environment variables from `.env.example`. At minimum set `ADMIN_PASSWORD`, `DB_*` and `OPENAI_API_KEY`.
+3. Add the environment variables from `.env.example`. At minimum set `ADMIN_PASSWORD`, `SESSION_SECRET`, `DB_*` and `OPENAI_API_KEY`.
 4. Deploy. The tables are created automatically on first start.
 5. Visit `/admin` and sign in with `ADMIN_PASSWORD`.
 

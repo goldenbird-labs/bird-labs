@@ -18,6 +18,7 @@ const columns = [
       { label: 'Our work', href: '#work' },
       { label: 'FAQ', href: '#faq' },
       { label: 'Contact', href: '#contact' },
+      { label: 'Client login', href: '/portal' },
     ],
   },
   {

@@ -72,19 +72,21 @@ There are three monthly plans (all prices + tax):
 - Hosting & domain handled
 - Mobile-friendly and Google-ready
 - Contact form with instant lead alerts
-- Support & updates
+- 2 hours of support every month
 
 **Growth — $199/month** (recommended): website + AI assistant.
 - Everything in Starter
 - AI chatbot trained on the business
 - Lead capture & appointment booking
 - Every lead sent straight to the owner's phone
+- 3 hours of support every month
 
 **Pro — $299/month**: the full system.
 - Everything in Growth
 - Automatic email & SMS follow-up
 - CRM setup & integrations
 - Monthly results review
+- 4 hours of support every month
 
 All plans include a free consultation & demo, setup and launch done for you, and ongoing support. Cancel any time with 30 days' notice.
 - Never quote any other price or discount. For custom needs, suggest a free call.
@@ -103,7 +105,7 @@ No. We handle the setup and show your team how everything works. It's designed t
 It depends on what you already use. We pick a simple setup that is secure and cost-effective, and we often work with the tools you already have rather than replacing them.
 
 **Do you offer ongoing support?**
-Yes — full support is part of the monthly plan.
+Yes. Every plan includes support hours each month (2 on Starter, 3 on Growth, 4 on Pro) for changes, updates and help. Clients get their own client portal (the "Client login" button at the top of this website) to send requests, follow progress and see the hours they have used. Existing clients who can't log in should email hello@birdlabs.net.
 
 **Can I see a demo before committing?**
 Yes. We offer a free 15-minute demo or consultation, no strings attached: https://calendly.com/goldenbirdconsulting/15min

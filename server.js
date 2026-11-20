@@ -8,6 +8,8 @@ import { captureLead } from './server/leads.js'
 import { chatRouter } from './server/chat.js'
 import { analyticsRouter } from './server/analytics.js'
 import { adminRouter } from './server/admin.js'
+import { portalRouter } from './server/portal.js'
+import { supportAdminRouter } from './server/support-admin.js'
 import { rateLimit, clean, EMAIL_RE } from './server/util.js'
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
@@ -62,15 +64,24 @@ app.post('/api/leads', rateLimit({ windowMs: 15 * 60 * 1000, max: 5, message: 'T
 app.use(chatRouter)
 app.use(analyticsRouter)
 app.use(adminRouter)
+app.use(supportAdminRouter)
+app.use(portalRouter)
 
 app.use('/api', (req, res) => res.status(404).json({ error: 'Not found' }))
 
-// ── Built frontend: / (site), /chat (Birdie, embedded), /admin (dashboard) ───
+// Express needs all four arguments to treat this as the error handler.
+app.use('/api', (err, req, res, _next) => {
+  console.error(`${req.method} ${req.originalUrl} failed:`, err)
+  if (!res.headersSent) res.status(500).json({ error: 'Something went wrong. Please try again.' })
+})
+
+// ── Built frontend: / (site), /chat (Birdie), /admin (dashboard), /portal (clients) ──
 const distPath = path.join(__dirname, 'dist')
 if (existsSync(distPath)) {
   app.use('/assets', express.static(path.join(distPath, 'assets'), { immutable: true, maxAge: '1y' }))
   app.use(express.static(distPath, { extensions: ['html'], maxAge: '1h' }))
   app.get('/admin/{*rest}', (req, res) => res.sendFile(path.join(distPath, 'admin.html')))
+  app.get('/portal/{*rest}', (req, res) => res.sendFile(path.join(distPath, 'portal.html')))
   app.get('/{*path}', (req, res) => res.sendFile(path.join(distPath, 'index.html')))
 }
 

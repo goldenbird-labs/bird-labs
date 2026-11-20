@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { Menu, X, Calendar } from 'lucide-react'
+import { Menu, X, Calendar, UserRound } from 'lucide-react'
 import Logo from './Logo'
 import { CALENDLY_URL } from '../lib/site'
 
@@ -43,8 +43,11 @@ export default function Navbar() {
         </div>
 
         <div className="flex items-center gap-2">
-          <a href="#contact" className="hidden text-[15px] font-medium text-ink-700 hover:text-ink-900 md:inline-block lg:mr-3">
+          <a href="#contact" className="hidden text-[15px] font-medium text-ink-700 hover:text-ink-900 xl:mr-2 xl:inline-block">
             Contact
+          </a>
+          <a href="/portal" className="btn-secondary px-3 py-2 text-sm sm:px-4 sm:py-2.5 sm:text-[15px]">
+            <UserRound size={16} /> <span className="sm:hidden">Login</span><span className="hidden sm:inline">Client login</span>
           </a>
           <a href={CALENDLY_URL} target="_blank" rel="noopener noreferrer" className="btn-primary hidden py-2.5 sm:inline-flex">
             <Calendar size={16} /> Book a free call
@@ -72,6 +75,9 @@ export default function Navbar() {
             ))}
             <a href={CALENDLY_URL} target="_blank" rel="noopener noreferrer" className="btn-primary mt-4 py-3.5" onClick={() => setOpen(false)}>
               <Calendar size={18} /> Book a free 15-min call
+            </a>
+            <a href="/portal" className="btn-secondary mt-2 py-3.5">
+              <UserRound size={18} /> Client login
             </a>
           </div>
         </div>

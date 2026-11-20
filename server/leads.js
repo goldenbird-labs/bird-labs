@@ -4,6 +4,7 @@
 import { readFileSync } from 'fs'
 import { google } from 'googleapis'
 import { store } from './store.js'
+import { pushover } from './notify.js'
 
 // ── IP location (leads only — page-view analytics never sends IPs anywhere) ──
 const geoCache = new Map()
@@ -65,10 +66,6 @@ async function appendToSheet(lead) {
 const SOURCE_LABEL = { form: 'Contact form', chat: 'Chatbot', review: 'Free review request' }
 
 async function sendPushover(lead) {
-  const token = process.env.PUSHOVER_APP_TOKEN || process.env.PUSHOVER_TOKEN
-  const user = process.env.PUSHOVER_USER_KEY || process.env.PUSHOVER_USER
-  if (!token || !user) return false
-
   const lines = [
     `Source: ${SOURCE_LABEL[lead.source] || lead.source}`,
     `Name: ${lead.name || 'N/A'}`,
@@ -81,14 +78,7 @@ async function sendPushover(lead) {
     lead.message && `\n${lead.message}`,
   ].filter(Boolean)
 
-  const res = await fetch('https://api.pushover.net/1/messages.json', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ token, user, title: 'New lead — Bird Labs', message: lines.join('\n').slice(0, 1024), priority: 1 }),
-    signal: AbortSignal.timeout(8000),
-  })
-  if (!res.ok) throw new Error(`Pushover responded ${res.status}`)
-  return true
+  return pushover('New lead — Bird Labs', lines.join('\n'), { priority: 1 })
 }
 
 // Returns once the lead is safely stored somewhere; throws only if every destination failed.

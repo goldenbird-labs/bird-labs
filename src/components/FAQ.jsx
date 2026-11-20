@@ -10,7 +10,7 @@ const faqs = [
   { q: 'Is there a contract?', a: 'To get started we take the first and last month’s payment. After that you can cancel any time with 30 days’ notice.' },
   { q: 'What does the AI chatbot actually do?', a: 'It answers your customers’ questions using information about your business, collects their contact details, books appointments, and sends you every lead straight away. Want to see one? The assistant in the corner of this page is one we built.' },
   { q: 'I already have a website. Can you still help?', a: 'Yes. We can redesign it, or keep it and add a chatbot and automatic follow-up to what you already have.' },
-  { q: 'Is support included?', a: 'Yes — ongoing support, updates and improvements are part of every monthly plan.' },
+  { q: 'Is support included?', a: 'Yes. Every plan includes support hours each month — 2 hours on Starter, 3 on Growth and 4 on Pro — for changes, updates and help. You get your own client portal to send us requests, follow progress and see how many hours you’ve used.' },
   { q: 'Where are you based?', a: 'We’re based in Niagara Falls, Ontario, and work with businesses anywhere. Our hours are Monday–Friday, 9am–5pm Eastern.' },
 ]
 

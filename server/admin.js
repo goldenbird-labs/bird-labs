@@ -36,7 +36,7 @@ export function isAdminRequest(req) {
   return sig.length === expected.length && crypto.timingSafeEqual(Buffer.from(sig), Buffer.from(expected))
 }
 
-function requireAdmin(req, res, next) {
+export function requireAdmin(req, res, next) {
   if (!isAdminRequest(req)) return res.status(401).json({ error: 'Please sign in.' })
   res.set('Cache-Control', 'no-store')
   next()

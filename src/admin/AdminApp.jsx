@@ -1,9 +1,11 @@
-import { useEffect, useState } from 'react'
-import { LogOut, LayoutDashboard, Users, ExternalLink, Lock } from 'lucide-react'
+import { useCallback, useEffect, useState } from 'react'
+import { LogOut, LayoutDashboard, Users, ExternalLink, Lock, Inbox, Building2 } from 'lucide-react'
 import { BirdMark } from '../components/Logo'
 import { api } from './api'
 import Dashboard from './Dashboard'
 import Leads from './Leads'
+import Requests from './Requests'
+import Customers from './Customers'
 
 function Login({ onSuccess, configured }) {
   const [password, setPassword] = useState('')
@@ -53,15 +55,32 @@ function Login({ onSuccess, configured }) {
 const TABS = [
   { key: 'overview', label: 'Overview', icon: LayoutDashboard },
   { key: 'leads', label: 'Leads', icon: Users },
+  { key: 'requests', label: 'Requests', icon: Inbox },
+  { key: 'customers', label: 'Customers', icon: Building2 },
 ]
+
+const TITLES = { overview: 'Overview', leads: 'Leads', requests: 'Client requests', customers: 'Customers' }
+
+function tabFromHash() {
+  const h = window.location.hash.replace('#', '')
+  return TABS.find(t => h === t.key || h.startsWith(t.key + '-'))?.key || 'overview'
+}
 
 export default function AdminApp() {
   const [auth, setAuth] = useState(null)
-  const [tab, setTab] = useState(() => (window.location.hash === '#leads' ? 'leads' : 'overview'))
+  const [tab, setTab] = useState(tabFromHash)
+  const [needsReply, setNeedsReply] = useState(0)
 
   const check = () => api('/api/admin/me').then(setAuth).catch(() => setAuth({ authenticated: false, configured: true }))
   useEffect(() => { check() }, [])
-  useEffect(() => { window.history.replaceState(null, '', tab === 'leads' ? '#leads' : '#') }, [tab])
+  useEffect(() => {
+    const h = window.location.hash.replace('#', '')
+    if (!(h === tab || h.startsWith(tab + '-'))) window.history.replaceState(null, '', tab === 'overview' ? '#' : `#${tab}`)
+  }, [tab])
+  const loadBadge = useCallback(() => {
+    api('/api/admin/tickets').then(d => setNeedsReply(d.tickets.filter(t => t.status === 'open' || (t.status !== 'done' && t.last_reply_by === 'customer')).length)).catch(() => {})
+  }, [])
+  useEffect(() => { if (auth?.authenticated) loadBadge() }, [auth, loadBadge])
 
   if (!auth) return <div className="min-h-dvh bg-ink-50" />
   if (!auth.authenticated) return <Login configured={auth.configured} onSuccess={check} />
@@ -86,9 +105,11 @@ export default function AdminApp() {
                 type="button"
                 onClick={() => setTab(key)}
                 aria-current={tab === key ? 'page' : undefined}
+                aria-label={label}
                 className={`inline-flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-sm font-medium ${tab === key ? 'bg-brand-50 text-brand-800' : 'text-ink-600 hover:text-ink-900'}`}
               >
-                <Icon size={16} /> {label}
+                <Icon size={16} /> <span className="hidden sm:inline">{label}</span>
+                {key === 'requests' && needsReply > 0 && <span className="rounded-full bg-brand-700 px-1.5 text-[11px] font-semibold leading-5 text-white">{needsReply}</span>}
               </button>
             ))}
           </nav>
@@ -104,8 +125,11 @@ export default function AdminApp() {
       </header>
 
       <main className="mx-auto max-w-7xl px-4 py-6 sm:px-6 sm:py-8">
-        <h1 className="mb-6 text-2xl font-extrabold">{tab === 'leads' ? 'Leads' : 'Overview'}</h1>
-        {tab === 'leads' ? <Leads /> : <Dashboard onOpenLeads={() => setTab('leads')} />}
+        <h1 className="mb-6 text-2xl font-extrabold">{TITLES[tab]}</h1>
+        {tab === 'overview' && <Dashboard onOpenLeads={() => setTab('leads')} />}
+        {tab === 'leads' && <Leads />}
+        {tab === 'requests' && <Requests onCountChange={setNeedsReply} />}
+        {tab === 'customers' && <Customers />}
       </main>
     </div>
   )

@@ -8,24 +8,24 @@ const plans = [
     name: 'Starter',
     price: 99,
     tagline: 'A professional website that brings in enquiries.',
-    features: ['Website design & development', 'Hosting & domain handled', 'Mobile-friendly and Google-ready', 'Contact form with instant lead alerts', 'Support & updates'],
+    features: ['Website design & development', 'Hosting & domain handled', 'Mobile-friendly and Google-ready', 'Contact form with instant lead alerts', '2 hours of support every month'],
   },
   {
     name: 'Growth',
     price: 199,
     tagline: 'Your website plus an AI assistant that works 24/7.',
-    features: ['Everything in Starter', 'AI chatbot trained on your business', 'Lead capture & appointment booking', 'Every lead sent straight to your phone'],
+    features: ['Everything in Starter', 'AI chatbot trained on your business', 'Lead capture & appointment booking', 'Every lead sent straight to your phone', '3 hours of support every month'],
     featured: true,
   },
   {
     name: 'Pro',
     price: 299,
     tagline: 'The full system — nothing slips through the cracks.',
-    features: ['Everything in Growth', 'Automatic email & SMS follow-up', 'CRM setup & integrations', 'Monthly results review'],
+    features: ['Everything in Growth', 'Automatic email & SMS follow-up', 'CRM setup & integrations', 'Monthly results review', '4 hours of support every month'],
   },
 ]
 
-const allPlans = ['No big upfront build fee', 'Free consultation & demo', 'Setup and launch done for you', 'Cancel any time with 30 days’ notice']
+const allPlans = ['No big upfront build fee', 'Your own client portal for requests', 'Setup and launch done for you', 'Cancel any time with 30 days’ notice']
 
 export default function Pricing() {
   return (
