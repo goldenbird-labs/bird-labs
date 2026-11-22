@@ -7,6 +7,7 @@ The marketing site for [birdlabs.net](https://birdlabs.net), with Birdie (the AI
 | `/` | Public website (React + Tailwind) |
 | `/chat` | Birdie, the AI chatbot. Opens in the floating chat window on the site |
 | `/admin` | Admin dashboard: visitor analytics, leads, client support requests and client accounts |
+| `/careers` | Careers page: open roles and job applications with résumé upload |
 | `/portal` | Client portal: customers sign in to send support requests and see their monthly support hours |
 
 The Express server in `server.js` serves the built site and these APIs:
@@ -16,6 +17,7 @@ The Express server in `server.js` serves the built site and these APIs:
 - `POST /api/track` — cookie-free page-view and click analytics
 - `/api/admin/*` — password-protected dashboard data, lead list, CSV export, customers and requests
 - `/api/portal/*` — client sign-in, support requests and replies
+- `/api/careers/*` — open roles and job applications
 
 ## Where leads go
 
@@ -29,6 +31,13 @@ Every lead is saved to the database and shows up in **/admin → Leads**. Copies
 4. In **/admin → Requests**, reply to them, change the status and **log time**. Logged time counts toward their monthly hours, which reset on the 1st.
 
 You get a Pushover alert for every new request and customer reply. Customers get an email when you reply, if `RESEND_API_KEY` is set.
+
+## Careers
+
+- `/careers` lists the roles that are open in **/admin → Careers → Jobs**. Each role has its own link (`/careers#job-<id>`). With no open roles, the page invites general applications.
+- Applicants can attach a résumé (PDF or Word, up to 5 MB) and/or a LinkedIn or portfolio link. Résumés are stored in the database so redeploys don't remove them. On Hostinger's MySQL, `max_allowed_packet` must be at least 8 MB, which is the default.
+- New applications appear in **/admin → Careers → Applications** and trigger a Pushover alert. The applicant gets a confirmation email if Resend is set up.
+- Two starter postings (Business Development Representative in Niagara Falls, and Web & AI Developer remote in India) are added the first time the app runs. Edit or close them in the admin; they won't be re-added. The text is in `server/seed.js`.
 
 ## Deploying on Hostinger (GitHub)
 

@@ -1,7 +1,7 @@
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
 
-// Four pages: the public site, the embedded Birdie chat, the admin dashboard and the client portal.
+// Pages: the public site, careers, the embedded Birdie chat, the admin dashboard and the client portal.
 export default defineConfig({
   plugins: [react()],
   build: {
@@ -11,6 +11,7 @@ export default defineConfig({
         chat: 'chat.html',
         admin: 'admin.html',
         portal: 'portal.html',
+        careers: 'careers.html',
       },
     },
   },

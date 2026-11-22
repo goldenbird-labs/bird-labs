@@ -1,11 +1,12 @@
 import { useCallback, useEffect, useState } from 'react'
-import { LogOut, LayoutDashboard, Users, ExternalLink, Lock, Inbox, Building2 } from 'lucide-react'
+import { LogOut, LayoutDashboard, Users, ExternalLink, Lock, Inbox, Building2, Briefcase } from 'lucide-react'
 import { BirdMark } from '../components/Logo'
 import { api } from './api'
 import Dashboard from './Dashboard'
 import Leads from './Leads'
 import Requests from './Requests'
 import Customers from './Customers'
+import Careers from './Careers'
 
 function Login({ onSuccess, configured }) {
   const [password, setPassword] = useState('')
@@ -57,9 +58,10 @@ const TABS = [
   { key: 'leads', label: 'Leads', icon: Users },
   { key: 'requests', label: 'Requests', icon: Inbox },
   { key: 'customers', label: 'Customers', icon: Building2 },
+  { key: 'careers', label: 'Careers', icon: Briefcase },
 ]
 
-const TITLES = { overview: 'Overview', leads: 'Leads', requests: 'Client requests', customers: 'Customers' }
+const TITLES = { overview: 'Overview', leads: 'Leads', requests: 'Client requests', customers: 'Customers', careers: 'Careers' }
 
 function tabFromHash() {
   const h = window.location.hash.replace('#', '')
@@ -70,6 +72,7 @@ export default function AdminApp() {
   const [auth, setAuth] = useState(null)
   const [tab, setTab] = useState(tabFromHash)
   const [needsReply, setNeedsReply] = useState(0)
+  const [newApps, setNewApps] = useState(0)
 
   const check = () => api('/api/admin/me').then(setAuth).catch(() => setAuth({ authenticated: false, configured: true }))
   useEffect(() => { check() }, [])
@@ -81,6 +84,9 @@ export default function AdminApp() {
     api('/api/admin/tickets').then(d => setNeedsReply(d.tickets.filter(t => t.status === 'open' || (t.status !== 'done' && t.last_reply_by === 'customer')).length)).catch(() => {})
   }, [])
   useEffect(() => { if (auth?.authenticated) loadBadge() }, [auth, loadBadge])
+  useEffect(() => {
+    if (auth?.authenticated) api('/api/admin/applications').then(d => setNewApps(d.applications.filter(a => a.status === 'new').length)).catch(() => {})
+  }, [auth])
 
   if (!auth) return <div className="min-h-dvh bg-ink-50" />
   if (!auth.authenticated) return <Login configured={auth.configured} onSuccess={check} />
@@ -110,6 +116,7 @@ export default function AdminApp() {
               >
                 <Icon size={16} /> <span className="hidden sm:inline">{label}</span>
                 {key === 'requests' && needsReply > 0 && <span className="rounded-full bg-brand-700 px-1.5 text-[11px] font-semibold leading-5 text-white">{needsReply}</span>}
+                {key === 'careers' && newApps > 0 && <span className="rounded-full bg-brand-700 px-1.5 text-[11px] font-semibold leading-5 text-white">{newApps}</span>}
               </button>
             ))}
           </nav>
@@ -130,6 +137,7 @@ export default function AdminApp() {
         {tab === 'leads' && <Leads />}
         {tab === 'requests' && <Requests onCountChange={setNeedsReply} />}
         {tab === 'customers' && <Customers />}
+        {tab === 'careers' && <Careers onCountChange={setNewApps} />}
       </main>
     </div>
   )

@@ -46,6 +46,31 @@ const SCHEMA = {
     columns: { ticket_id: 'INT', customer_id: 'INT', minutes: 'INT', note: 'VARCHAR(300)' },
     indexes: ['customer_id', 'ticket_id'],
   },
+  jobs: {
+    columns: {
+      title: 'VARCHAR(200)', type: 'VARCHAR(32)', location: 'VARCHAR(120)', summary: 'VARCHAR(400)', description: 'TEXT',
+      status: 'VARCHAR(16)', updated_at: 'DATETIME(3)',
+    },
+    indexes: ['status'],
+  },
+  applications: {
+    columns: {
+      job_id: 'INT', job_title: 'VARCHAR(200)', name: 'VARCHAR(200)', email: 'VARCHAR(254)', phone: 'VARCHAR(64)',
+      location: 'VARCHAR(120)', links: 'VARCHAR(500)', message: 'TEXT', file_id: 'INT', resume_name: 'VARCHAR(255)',
+      status: 'VARCHAR(16)', notes: 'TEXT', ip: 'VARCHAR(64)',
+    },
+    indexes: ['job_id', 'status'],
+  },
+  // One-off flags, e.g. "starter jobs already added".
+  meta: {
+    columns: { name: 'VARCHAR(64)', value: 'TEXT' },
+    indexes: ['name'],
+  },
+  // Uploaded files (résumés), stored base64-encoded so they survive redeploys.
+  files: {
+    columns: { name: 'VARCHAR(255)', type: 'VARCHAR(120)', size: 'INT', data: 'LONGTEXT' },
+    indexes: [],
+  },
 }
 
 const NUMERIC = /^(INT|TINYINT|DECIMAL)/

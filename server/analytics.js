@@ -8,7 +8,7 @@ import { isAdminRequest } from './admin.js'
 
 export const EVENT_TYPES = [
   'pageview', 'chat_open', 'chat_message', 'calendly_click', 'whatsapp_click', 'email_click', 'phone_click',
-  'form_start', 'form_submit', 'review_submit',
+  'form_start', 'form_submit', 'review_submit', 'application_submit',
 ]
 
 // "America/Toronto" → "Toronto"; "Asia/Kolkata" → "Kolkata"

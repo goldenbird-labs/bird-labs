@@ -5,19 +5,20 @@ const columns = [
   {
     title: 'Services',
     links: [
-      { label: 'Websites', href: '#services' },
-      { label: 'AI chatbots', href: '#services' },
-      { label: 'Automation', href: '#services' },
-      { label: 'Pricing', href: '#pricing' },
+      { label: 'Websites', href: '/#services' },
+      { label: 'AI chatbots', href: '/#services' },
+      { label: 'Automation', href: '/#services' },
+      { label: 'Pricing', href: '/#pricing' },
     ],
   },
   {
     title: 'Company',
     links: [
-      { label: 'How it works', href: '#process' },
-      { label: 'Our work', href: '#work' },
-      { label: 'FAQ', href: '#faq' },
-      { label: 'Contact', href: '#contact' },
+      { label: 'How it works', href: '/#process' },
+      { label: 'Our work', href: '/#work' },
+      { label: 'FAQ', href: '/#faq' },
+      { label: 'Contact', href: '/#contact' },
+      { label: 'Careers', href: '/careers' },
       { label: 'Client login', href: '/portal' },
     ],
   },

@@ -4,12 +4,14 @@ import path from 'path'
 import { existsSync } from 'fs'
 import { fileURLToPath } from 'url'
 import { initStore } from './server/store.js'
+import { seedOnce } from './server/seed.js'
 import { captureLead } from './server/leads.js'
 import { chatRouter } from './server/chat.js'
 import { analyticsRouter } from './server/analytics.js'
 import { adminRouter } from './server/admin.js'
 import { portalRouter } from './server/portal.js'
 import { supportAdminRouter } from './server/support-admin.js'
+import { careersRouter } from './server/careers.js'
 import { rateLimit, clean, EMAIL_RE } from './server/util.js'
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
@@ -66,6 +68,7 @@ app.use(analyticsRouter)
 app.use(adminRouter)
 app.use(supportAdminRouter)
 app.use(portalRouter)
+app.use(careersRouter)
 
 app.use('/api', (req, res) => res.status(404).json({ error: 'Not found' }))
 
@@ -75,7 +78,7 @@ app.use('/api', (err, req, res, _next) => {
   if (!res.headersSent) res.status(500).json({ error: 'Something went wrong. Please try again.' })
 })
 
-// ── Built frontend: / (site), /chat (Birdie), /admin (dashboard), /portal (clients) ──
+// ── Built frontend: / (site), /careers, /chat (Birdie), /admin (dashboard), /portal (clients) ──
 const distPath = path.join(__dirname, 'dist')
 if (existsSync(distPath)) {
   app.use('/assets', express.static(path.join(distPath, 'assets'), { immutable: true, maxAge: '1y' }))
@@ -86,4 +89,5 @@ if (existsSync(distPath)) {
 }
 
 await initStore()
+await seedOnce().catch(err => console.error('Seeding failed:', err.message))
 app.listen(PORT, () => console.log(`Bird Labs server running at http://localhost:${PORT}`))
