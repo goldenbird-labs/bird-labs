@@ -7,6 +7,7 @@ import Process from './components/Process'
 import Work from './components/Work'
 import Pricing from './components/Pricing'
 import FAQ from './components/FAQ'
+import FinalCTA from './components/FinalCTA'
 import Contact from './components/Contact'
 import Footer from './components/Footer'
 import MobileCTA from './components/MobileCTA'
@@ -28,6 +29,7 @@ export default function App() {
         <Work />
         <Pricing />
         <FAQ />
+        <FinalCTA />
         <Contact />
       </main>
       <Footer />

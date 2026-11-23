@@ -16,7 +16,7 @@ export default function Process() {
         <div className="grid gap-12 lg:grid-cols-[1fr_1.4fr] lg:gap-16">
           <Reveal className="lg:sticky lg:top-28 lg:self-start">
             <p className="eyebrow">How it works</p>
-            <h2 id="process-title" className="section-title">From first call to live in as little as a week</h2>
+            <h2 id="process-title" className="section-title">From first call to live in <span className="text-gradient-brand">as little as a week</span></h2>
             <p className="section-lead">You don't need to be technical. We do the work and keep you in the loop in plain English.</p>
             <a href={CALENDLY_URL} target="_blank" rel="noopener noreferrer" className="btn-primary mt-8">
               <Calendar size={18} /> Start with a free call
@@ -24,9 +24,10 @@ export default function Process() {
           </Reveal>
 
           <ol className="relative space-y-5">
+            <span aria-hidden="true" className="absolute bottom-10 left-[2.75rem] top-10 w-0.5 rounded-full bg-gradient-to-b from-brand-500 via-fuchsia-500 to-sky-500 opacity-40" />
             {steps.map((s, i) => (
-              <Reveal as="li" key={s.title} delay={i * 70} className="card flex gap-5 p-6">
-                <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-brand-50 font-display text-lg font-extrabold text-brand-700 ring-1 ring-brand-200">
+              <Reveal as="li" key={s.title} delay={i * 70} className="card relative flex gap-5 p-6 transition hover:shadow-lift">
+                <span className="relative flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-brand-600 to-fuchsia-600 font-display text-lg font-extrabold text-white shadow-[0_6px_20px_-4px_rgba(124,58,237,0.6)] ring-4 ring-white">
                   {i + 1}
                 </span>
                 <div>

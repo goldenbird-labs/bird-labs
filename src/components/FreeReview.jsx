@@ -23,7 +23,7 @@ export default function FreeReview() {
   }
 
   return (
-    <section aria-labelledby="review-title" className="container-site -mt-6 relative z-10">
+    <section aria-labelledby="review-title" className="container-site relative z-10 -mt-14 sm:-mt-16">
       <div className="card flex flex-col gap-6 p-6 sm:p-8 lg:flex-row lg:items-center lg:gap-10">
         <div className="flex items-start gap-4 lg:max-w-md">
           <span className="hidden h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-brand-50 text-brand-700 sm:flex">

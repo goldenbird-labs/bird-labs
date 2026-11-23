@@ -33,7 +33,7 @@ export default function Pricing() {
       <div className="container-site">
         <Reveal className="mx-auto max-w-2xl text-center">
           <p className="eyebrow">Pricing</p>
-          <h2 id="pricing-title" className="section-title">No $1,000s upfront. Just one simple monthly plan.</h2>
+          <h2 id="pricing-title" className="section-title">No $1,000s upfront. <span className="text-gradient-brand">Just one simple monthly plan.</span></h2>
           <p className="section-lead">
             Agencies often charge thousands of dollars to build a website — and more again for a chatbot. We keep it cost-effective: one affordable monthly subscription covers design, hosting, AI and support. Start where you are and move up any time.
           </p>
@@ -44,10 +44,14 @@ export default function Pricing() {
             <Reveal
               key={plan.name}
               delay={i * 80}
-              className={`relative flex flex-col rounded-3xl p-7 sm:p-8 ${plan.featured ? 'bg-ink-900 text-white shadow-lift lg:-my-3 lg:py-11' : 'card'}`}
+              className={`relative isolate flex flex-col overflow-hidden rounded-3xl p-7 sm:p-8 ${plan.featured ? 'stage text-white shadow-[0_30px_70px_-20px_rgba(124,58,237,0.65)] ring-1 ring-brand-400/40 lg:-my-3 lg:py-11' : 'card transition duration-300 hover:-translate-y-1 hover:shadow-lift'}`}
             >
+              {plan.featured && <>
+                <div aria-hidden="true" className="aurora-blob -right-20 -top-24 h-64 w-64 bg-brand-600" style={{ filter: 'blur(60px)', opacity: 0.6 }} />
+                <div aria-hidden="true" className="aurora-blob -bottom-24 -left-16 h-56 w-56 bg-fuchsia-600" style={{ filter: 'blur(60px)', opacity: 0.35, animationDelay: '-8s' }} />
+              </>}
               {plan.featured && (
-                <span className="absolute -top-3 left-1/2 -translate-x-1/2 rounded-full bg-brand-600 px-3.5 py-1 text-xs font-semibold text-white">Recommended</span>
+                <span className="absolute right-6 top-6 rounded-full bg-gradient-to-r from-brand-500 to-fuchsia-500 px-3 py-1 text-xs font-semibold text-white shadow-lg sm:right-8 lg:top-10">Most popular</span>
               )}
               <h3 className={`text-lg font-bold ${plan.featured ? 'text-white' : ''}`}>{plan.name}</h3>
               <p className={`mt-1.5 text-[15px] leading-relaxed ${plan.featured ? 'text-ink-300' : 'text-ink-600'}`}>{plan.tagline}</p>
