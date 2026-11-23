@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { Plus, ChevronDown, Download, Eye, Trash2, Mail, Phone, MapPin, Link2, Pencil, ExternalLink, RefreshCw, FileText } from 'lucide-react'
 import { api, formatDateTime, timeAgo } from './api'
+import { jobPath } from '../lib/jobs'
 
 const APP_STATUS = {
   new: { label: 'New', className: 'bg-blue-50 text-blue-800 ring-blue-200' },
@@ -272,6 +273,7 @@ function Jobs({ data, reload }) {
               </div>
               <span className={`rounded-full px-2.5 py-0.5 text-xs font-medium ring-1 ${j.status === 'open' ? 'bg-green-50 text-green-800 ring-green-200' : 'bg-ink-100 text-ink-600 ring-ink-200'}`}>{j.status === 'open' ? 'Live' : 'Closed'}</span>
               <div className="flex gap-1">
+                {j.status === 'open' && <a href={jobPath(j)} target="_blank" rel="noopener" className="inline-flex items-center gap-1 rounded-lg px-2.5 py-1.5 text-sm font-medium text-ink-700 hover:bg-ink-50"><ExternalLink size={14} /> View page</a>}
                 <button type="button" onClick={() => setEditing(j)} className="inline-flex items-center gap-1 rounded-lg px-2.5 py-1.5 text-sm font-medium text-ink-700 hover:bg-ink-50"><Pencil size={14} /> Edit</button>
                 <button type="button" onClick={() => toggle(j)} className="rounded-lg px-2.5 py-1.5 text-sm font-medium text-ink-700 hover:bg-ink-50">{j.status === 'open' ? 'Close' : 'Reopen'}</button>
                 <button type="button" onClick={() => remove(j)} className="rounded-lg p-1.5 text-ink-400 hover:bg-red-50 hover:text-red-700" aria-label={`Delete ${j.title}`}><Trash2 size={15} /></button>
@@ -282,7 +284,7 @@ function Jobs({ data, reload }) {
       ) : !editing && (
         <div className="rounded-2xl border border-dashed border-ink-300 bg-white py-14 text-center">
           <p className="font-medium text-ink-700">No roles posted</p>
-          <p className="mt-1 text-sm text-ink-500">Your Careers page invites general applications until you post a role.</p>
+          <p className="mt-1 text-sm text-ink-500">Each role you post gets its own page with its own application form.</p>
         </div>
       )}
     </div>

@@ -85,6 +85,7 @@ if (existsSync(distPath)) {
   app.use(express.static(distPath, { extensions: ['html'], maxAge: '1h' }))
   app.get('/admin/{*rest}', (req, res) => res.sendFile(path.join(distPath, 'admin.html')))
   app.get('/portal/{*rest}', (req, res) => res.sendFile(path.join(distPath, 'portal.html')))
+  app.get('/careers/{*rest}', (req, res) => res.sendFile(path.join(distPath, 'careers.html'))) // one page per role
   app.get('/{*path}', (req, res) => res.sendFile(path.join(distPath, 'index.html')))
 }
 

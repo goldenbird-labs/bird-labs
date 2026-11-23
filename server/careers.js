@@ -5,6 +5,7 @@ import { store } from './store.js'
 import { rateLimit, clean, EMAIL_RE } from './util.js'
 import { requireAdmin } from './admin.js'
 import { pushover, sendEmail, escapeHtml } from './notify.js'
+import { jobPath } from '../src/lib/jobs.js'
 
 export const JOB_TYPES = ['Full-time', 'Part-time', 'Contract', 'Internship']
 export const APPLICATION_STATUSES = ['new', 'shortlisted', 'rejected', 'hired']
@@ -60,6 +61,21 @@ careersRouter.get('/api/careers/jobs', async (req, res) => {
   res.json({ jobs: jobs.map(publicJob) })
 })
 
+// Sitemap with a page for every open role (replaces a static sitemap.xml).
+careersRouter.get('/sitemap.xml', async (req, res) => {
+  const base = (process.env.PUBLIC_URL || 'https://birdlabs.net').replace(/\/$/, '')
+  const jobs = await store.list('jobs', { where: { status: 'open' } })
+  const urls = [
+    { loc: `${base}/`, priority: '1.0' },
+    { loc: `${base}/careers`, priority: '0.6' },
+    ...jobs.map(j => ({ loc: `${base}${jobPath(j)}`, priority: '0.5', lastmod: new Date(j.updated_at || j.created_at).toISOString().slice(0, 10) })),
+  ]
+  const body = urls.map(u =>
+    `  <url><loc>${escapeHtml(u.loc)}</loc>${u.lastmod ? `<lastmod>${u.lastmod}</lastmod>` : ''}<changefreq>weekly</changefreq><priority>${u.priority}</priority></url>`).join('\n')
+  res.type('application/xml').set('Cache-Control', 'public, max-age=3600')
+    .send(`<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${body}\n</urlset>\n`)
+})
+
 careersRouter.post('/api/careers/apply', rateLimit({ windowMs: 60 * 60 * 1000, max: 5, message: 'Too many applications from this connection. Please try again later or email hello@birdlabs.net.' }), acceptResume, async (req, res) => {
   const b = req.body || {}
   if (clean(b.company_site)) return res.json({ ok: true }) // honeypot
@@ -79,7 +95,7 @@ careersRouter.post('/api/careers/apply', rateLimit({ windowMs: 60 * 60 * 1000, m
   let job = null
   if (b.job_id) {
     job = await store.get('jobs', Number(b.job_id))
-    if (!job || job.status !== 'open') return res.status(400).json({ error: 'That role is no longer open. You can still send a general application.' })
+    if (!job || job.status !== 'open') return res.status(400).json({ error: 'Sorry, this role is no longer open. Please see our other open roles at birdlabs.net/careers.' })
   }
 
   let fileId = null

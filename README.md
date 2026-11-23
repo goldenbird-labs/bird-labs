@@ -34,7 +34,7 @@ You get a Pushover alert for every new request and customer reply. Customers get
 
 ## Careers
 
-- `/careers` lists the roles that are open in **/admin → Careers → Jobs**. Each role has its own link (`/careers#job-<id>`). With no open roles, the page invites general applications.
+- `/careers` lists the roles that are open in **/admin → Careers → Jobs**. Each role has its own page with its own application form at `/careers/<id>-<title>` (for example `/careers/2-web-ai-developer`), which you can share on LinkedIn or job boards. Role pages include JobPosting data so they can appear in Google's job search.
 - Applicants can attach a résumé (PDF or Word, up to 5 MB) and/or a LinkedIn or portfolio link. Résumés are stored in the database so redeploys don't remove them. On Hostinger's MySQL, `max_allowed_packet` must be at least 8 MB, which is the default.
 - New applications appear in **/admin → Careers → Applications** and trigger a Pushover alert. The applicant gets a confirmation email if Resend is set up.
 - Two starter postings (Business Development Representative in Niagara Falls, and Web & AI Developer remote in India) are added the first time the app runs. Edit or close them in the admin; they won't be re-added. The text is in `server/seed.js`.
