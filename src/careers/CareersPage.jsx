@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
-import { Briefcase, MapPin, Clock, ArrowRight, ArrowLeft, Rocket, GraduationCap, Users, Upload, FileText, X, CheckCircle2, AlertCircle, Send, Link2, Check, Mail } from 'lucide-react'
+import { Briefcase, MapPin, Clock, Wallet, ArrowRight, ArrowLeft, Rocket, GraduationCap, Users, Upload, FileText, X, CheckCircle2, AlertCircle, Send, Link2, Check, Mail } from 'lucide-react'
 import Navbar from '../components/Navbar'
 import Footer from '../components/Footer'
 import Reveal from '../components/Reveal'
@@ -56,6 +56,7 @@ function JobMeta({ job, className = '' }) {
     <p className={`flex flex-wrap gap-x-4 gap-y-1 text-ink-500 ${className}`}>
       <span className="inline-flex items-center gap-1.5"><Clock size={15} /> {job.type}</span>
       {job.location && <span className="inline-flex items-center gap-1.5"><MapPin size={15} /> {job.location}</span>}
+      {job.pay && <span className="inline-flex items-center gap-1.5 font-medium text-ink-700"><Wallet size={15} /> {job.pay}</span>}
     </p>
   )
 }
@@ -92,6 +93,13 @@ function useJobSeo(job) {
       ...(remote
         ? { jobLocationType: 'TELECOMMUTE', ...(place && { applicantLocationRequirements: { '@type': 'Country', name: place } }) }
         : { jobLocation: { '@type': 'Place', address: { '@type': 'PostalAddress', addressLocality: city, ...(region && { addressRegion: region }), addressCountry: 'CA' } } }),
+    }
+    // "$19–$27/hour" → baseSalary for Google for Jobs
+    const nums = String(job.pay || '').replace(/,/g, '').match(/\d+(?:\.\d+)?/g)?.map(Number) || []
+    if (nums.length) {
+      const unit = /h(ou)?r/i.test(job.pay) ? 'HOUR' : /month/i.test(job.pay) ? 'MONTH' : /week/i.test(job.pay) ? 'WEEK' : 'YEAR'
+      const currency = /₹|inr|lpa|lakh/i.test(job.pay) ? 'INR' : /usd|us\$/i.test(job.pay) ? 'USD' : 'CAD'
+      data.baseSalary = { '@type': 'MonetaryAmount', currency, value: { '@type': 'QuantitativeValue', minValue: Math.min(...nums), maxValue: Math.max(...nums), unitText: unit } }
     }
     const script = document.createElement('script')
     script.type = 'application/ld+json'
@@ -156,7 +164,7 @@ function ApplyForm({ job }) {
     <form onSubmit={submit} className="card space-y-5 p-6 sm:p-8" aria-labelledby="apply-title">
       <div>
         <h2 id="apply-title" className="text-2xl font-extrabold">Apply for this role</h2>
-        <p className="mt-1 text-ink-600">{job.title} · {job.type} · {job.location}</p>
+        <p className="mt-1 text-ink-600">{[job.title, job.type, job.location, job.pay].filter(Boolean).join(' · ')}</p>
       </div>
       <div className="grid gap-5 sm:grid-cols-2">
         <div><label className="label" htmlFor="a-name">Full name *</label><input id="a-name" name="name" required autoComplete="name" maxLength={200} className="input" value={form.name} onChange={set} /></div>

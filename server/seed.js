@@ -7,6 +7,7 @@ const STARTER_JOBS = [
     title: 'Business Development Representative',
     type: 'Part-time',
     location: 'Niagara Falls, ON',
+    pay: '$19–$27/hour',
     summary: 'Help local businesses across the Niagara region get more customers — and grow Bird Labs while you do it.',
     description: `Bird Labs builds websites, AI chatbots and automations for small businesses on simple monthly plans, starting at $99/month. We're looking for a part-time Business Development Representative in Niagara Falls to grow our client base across the Niagara region.
 
@@ -32,7 +33,7 @@ You'll be the local face of Bird Labs: meeting business owners, understanding wh
 ## Details
 - Part-time with flexible hours
 - Based in Niagara Falls, ON, working with local businesses in person
-- Compensation will be discussed during the interview`,
+- Pay: $19–$27 per hour, depending on experience`,
   },
   {
     title: 'Web & AI Developer',

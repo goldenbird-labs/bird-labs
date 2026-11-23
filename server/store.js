@@ -48,7 +48,7 @@ const SCHEMA = {
   },
   jobs: {
     columns: {
-      title: 'VARCHAR(200)', type: 'VARCHAR(32)', location: 'VARCHAR(120)', summary: 'VARCHAR(400)', description: 'TEXT',
+      title: 'VARCHAR(200)', type: 'VARCHAR(32)', location: 'VARCHAR(120)', summary: 'VARCHAR(400)', description: 'TEXT', pay: 'VARCHAR(100)',
       status: 'VARCHAR(16)', updated_at: 'DATETIME(3)',
     },
     indexes: ['status'],

@@ -190,7 +190,7 @@ function Applications({ jobs, onCountChange }) {
 
 // ── Jobs ─────────────────────────────────────────────────────────────────────
 function JobForm({ initial, types, onSave, onCancel, busy }) {
-  const [f, setF] = useState(() => ({ title: '', type: 'Full-time', location: '', summary: '', description: '', status: 'open', ...initial }))
+  const [f, setF] = useState(() => ({ title: '', type: 'Full-time', location: '', pay: '', summary: '', description: '', status: 'open', ...initial }))
   const set = (k, v) => setF(prev => ({ ...prev, [k]: v }))
   return (
     <form onSubmit={e => { e.preventDefault(); onSave(f) }} className="space-y-4 rounded-2xl border border-ink-200 bg-white p-5 sm:p-6">
@@ -203,7 +203,10 @@ function JobForm({ initial, types, onSave, onCancel, busy }) {
         </div>
         <div><label className="label" htmlFor="jf-loc">Location</label><input id="jf-loc" maxLength={120} className="input" value={f.location || ''} onChange={e => set('location', e.target.value)} placeholder="Remote / Niagara Falls, ON" /></div>
       </div>
-      <div><label className="label" htmlFor="jf-sum">One-line summary</label><input id="jf-sum" maxLength={400} className="input" value={f.summary || ''} onChange={e => set('summary', e.target.value)} placeholder="Shown on the job card before it’s opened" /></div>
+      <div className="grid gap-4 sm:grid-cols-[2fr_1fr]">
+        <div><label className="label" htmlFor="jf-sum">One-line summary</label><input id="jf-sum" maxLength={400} className="input" value={f.summary || ''} onChange={e => set('summary', e.target.value)} placeholder="Shown on the job card" /></div>
+        <div><label className="label" htmlFor="jf-pay">Pay <span className="font-normal text-ink-400">(optional)</span></label><input id="jf-pay" maxLength={100} className="input" value={f.pay || ''} onChange={e => set('pay', e.target.value)} placeholder="$19–$27/hour" /></div>
+      </div>
       <div>
         <label className="label" htmlFor="jf-desc">Description *</label>
         <textarea id="jf-desc" required rows={12} className="input font-mono text-sm" value={f.description} onChange={e => set('description', e.target.value)} placeholder={DESCRIPTION_HINT} />
@@ -269,7 +272,7 @@ function Jobs({ data, reload }) {
             <li key={j.id} className={`flex flex-wrap items-center gap-4 rounded-2xl border bg-white p-4 ${j.status === 'open' ? 'border-ink-200' : 'border-dashed border-ink-300'}`}>
               <div className="min-w-0 flex-1">
                 <p className="truncate font-semibold text-ink-900">{j.title}</p>
-                <p className="text-sm text-ink-500">{j.type}{j.location ? ` · ${j.location}` : ''} · {j.applications} application{j.applications === 1 ? '' : 's'} · posted {timeAgo(j.created_at)}</p>
+                <p className="text-sm text-ink-500">{j.type}{j.location ? ` · ${j.location}` : ''}{j.pay ? ` · ${j.pay}` : ''} · {j.applications} application{j.applications === 1 ? '' : 's'} · posted {timeAgo(j.created_at)}</p>
               </div>
               <span className={`rounded-full px-2.5 py-0.5 text-xs font-medium ring-1 ${j.status === 'open' ? 'bg-green-50 text-green-800 ring-green-200' : 'bg-ink-100 text-ink-600 ring-ink-200'}`}>{j.status === 'open' ? 'Live' : 'Closed'}</span>
               <div className="flex gap-1">

@@ -37,7 +37,7 @@ function acceptResume(req, res, next) {
 }
 
 function publicJob(j) {
-  return { id: j.id, title: j.title, type: j.type, location: j.location, summary: j.summary, description: j.description, created_at: j.created_at }
+  return { id: j.id, title: j.title, type: j.type, location: j.location, pay: j.pay, summary: j.summary, description: j.description, created_at: j.created_at }
 }
 
 function jobFields(body, { partial = false } = {}) {
@@ -47,6 +47,7 @@ function jobFields(body, { partial = false } = {}) {
   set('type', JOB_TYPES.includes(body.type) ? body.type : 'Full-time')
   set('location', clean(body.location, 120))
   set('summary', clean(body.summary, 400))
+  set('pay', clean(body.pay, 100))
   set('description', clean(body.description, 20000))
   set('status', body.status === 'closed' ? 'closed' : 'open')
   return out
